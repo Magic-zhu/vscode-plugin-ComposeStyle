@@ -5,19 +5,22 @@ function dropAnnotation(css) {
     let pos = 0;
     let r = ''
     for (let i = 0; i < css.length; i++) {
-        // console.log(css[i])
-        if (css[i] == '/' && css[i + 1] == '/' && status == 0) {
-            r = r +css.substring(pos, i)
+        if (css[i] == '/' && (css[i + 1] == '/' || css[i + 1] == '*') && status == 0) {
+            r = r + css.substring(pos, i)
             status = 1
             pos = i
         } else if (
-            (css[i] == ' ' && status==1)
+            (
+                css[i].charCodeAt(0) == '0x0D' ||
+                css[i].charCodeAt(0) == '0x0A' ||
+                (css[i] == '/' && css[i - 1] == '*')
+            ) && status == 1
         ) {
             status = 0
-            pos = i+1
+            pos = i + 1
         }
     }
-    r = r +css.substring(pos, css.length)
+    r = r + css.substring(pos, css.length)
     return r
 }
 function transform(css) {
