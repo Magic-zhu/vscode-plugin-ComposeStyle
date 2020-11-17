@@ -1,4 +1,5 @@
 const prettier = require("prettier");
+const RULES = require('./RULES')
 function dropAnnotation(css) {
     let status = 0;
     let pos = 0;
@@ -28,14 +29,6 @@ function transform(css) {
         let p = element.split(':');
         if (element) attrs[p[0].replace(/\s/g, '')] = p[1].trim();
     })
-    const RULES = [
-        "position", "z-index", "left", "right", "top", "bottom", "clip",
-        "width", "height", "min-height", "max-height", "min-width", "max-width",
-        "color", "font-size", "letter-spacing", "color", "text-align",
-        "background", "background-image", "border",
-        "text-align", "vertical-align", "text-wrap", "text-transform", "text-indent", "text-decoration", "letter-spacing", "word-spacing", "white-space", "text-overflow",
-        "content", "box-shadow", "animation", "border-radius", "transform"
-    ]
     let newAttrs = ''
     RULES.forEach((item) => {
         if (attrs[item]) {
