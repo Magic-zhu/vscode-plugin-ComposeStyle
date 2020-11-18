@@ -1,10 +1,10 @@
-
-const border = require('./rules/border')
-const margin = require('./rules/margin')
-const padding = require('./rules/padding')
+const position = require('./position')
+const border = require('./border')
+const margin = require('./margin')
+const padding = require('./padding')
 
 const RULES = [
-    "position", "z-index", "left", "right", "top", "bottom", "clip","float",
+    ...position,
     "display","align-items","justify-content","flex-direction","flex-wrap",
     "overflow","visibility",
     "width", "height", "min-height", "max-height", "min-width", "max-width",

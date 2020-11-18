@@ -25,7 +25,9 @@ function activate(context) {
 				vscode.window.showErrorMessage('something wrong')
 				return
 			}
-			let data = parse(buffer.toString(),{parser:type})
+			let data = parse(buffer.toString(),{parser:type},()=>{
+				vscode.window.showErrorMessage('检测到不支持的语法')
+			})
 			fs.writeFile(doc.fileName,data,(err)=>{
 				if(err){
 					vscode.window.showErrorMessage('something wrong')

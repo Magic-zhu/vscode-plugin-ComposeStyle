@@ -1,5 +1,6 @@
-const prettier = require("prettier");
-const RULES = require('./RULES')
+const prettier = require("prettier")
+const RULES = require('./rules')
+//去除注释
 function dropAnnotation(css) {
     let status = 0;
     let pos = 0;
@@ -23,6 +24,7 @@ function dropAnnotation(css) {
     r = r + css.substring(pos, css.length)
     return r
 }
+//属性排序
 function transform(css) {
     css = dropAnnotation(css);
     let attrsArray = css.replace(/\n/g, '').split(';');
@@ -45,7 +47,7 @@ function transform(css) {
     return newAttrs
 }
 
-function parse(css, options = {}) {
+function parse(css, options = {}, callback) {
     let status = 'normal';
     let slicePosition = 0;
     let result = [];
@@ -75,10 +77,12 @@ function parse(css, options = {}) {
     let newCss = result.reduce((s, a) => s + a)
     try {
         newCss = prettier.format(newCss, { parser: options.parser || 'css' })
+        return newCss
     } catch (error) {
 
+        callback(error)
+        return css
     }
-    return newCss
 }
 
 module.exports = parse
