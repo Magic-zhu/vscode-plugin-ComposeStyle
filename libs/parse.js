@@ -5,6 +5,8 @@ function dropAnnotation(css) {
     let status = 0;
     let pos = 0;
     let r = ''
+    css = css.replace(/https:\/\//g, '@https@')
+    css = css.replace(/http:\/\//g, '@http@')
     for (let i = 0; i < css.length; i++) {
         if (css[i] == '/' && (css[i + 1] == '/' || css[i + 1] == '*') && status == 0) {
             r = r + css.substring(pos, i)
@@ -22,6 +24,8 @@ function dropAnnotation(css) {
         }
     }
     r = r + css.substring(pos, css.length)
+    r = r.replace(/@https@/g, 'https://')
+    r = r.replace(/@http@/g, 'http://')
     return r
 }
 //属性排序
@@ -31,7 +35,14 @@ function transform(css) {
     attrsArray.pop();
     let attrs = {};
     attrsArray.forEach(element => {
-        let p = element.split(':');
+        let p = element.split(':')
+        if (p.length > 2) { //处理存在多个:的情况
+            let count = 2, final = p.length
+            while (count < final) {
+                p[1] = p[1] + ':' + p[count]
+                count++
+            }
+        }
         if (element) attrs[p[0].replace(/\s/g, '')] = p[1].trim();
     })
     let newAttrs = ''
@@ -79,7 +90,6 @@ function parse(css, options = {}, callback) {
         newCss = prettier.format(newCss, { parser: options.parser || 'css' })
         return newCss
     } catch (error) {
-
         callback(error)
         return css
     }
