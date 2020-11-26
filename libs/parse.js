@@ -33,6 +33,7 @@ function transform(css) {
     css = dropAnnotation(css);
     let attrsArray = css.replace(/\n/g, '').split(';');
     attrsArray.pop();
+    let newAttrs = '';
     let attrs = {};
     attrsArray.forEach(element => {
         let p = element.split(':')
@@ -43,9 +44,12 @@ function transform(css) {
                 count++
             }
         }
-        if (element) attrs[p[0].replace(/\s/g, '')] = p[1].trim();
+        if (p.length == 1) {
+            newAttrs = p[0] + ';'
+        } else if (element) {
+            attrs[p[0].replace(/\s/g, '')] = p[1].trim();
+        }
     })
-    let newAttrs = ''
     RULES.forEach((item) => {
         if (attrs[item]) {
             newAttrs = newAttrs + item + ":" + attrs[item] + ";";
@@ -90,6 +94,7 @@ function parse(css, options = {}, callback) {
         newCss = prettier.format(newCss, { parser: options.parser || 'css' })
         return newCss
     } catch (error) {
+        console.log('zheli')
         callback(error)
         return css
     }
