@@ -1,12 +1,26 @@
 const prettier = require("prettier")
 const RULES = require('./rules')
+
+function encode(input){
+    let output;
+    output = input.replace(/https:\/\//g, '@https@')
+    output = output.replace(/http:\/\//g, '@http@')
+    return output
+}
+
+function decode(input){
+    let output;
+    output = input.replace(/@https@/g, 'https://')
+    output = output.replace(/@http@/g, 'http://')
+    return output
+}
+
 //去除注释
-function dropAnnotation(css) {
+function dropAnnotation(input) {
     let status = 0;
     let pos = 0;
     let r = ''
-    css = css.replace(/https:\/\//g, '@https@')
-    css = css.replace(/http:\/\//g, '@http@')
+    let css = encode(input)
     for (let i = 0; i < css.length; i++) {
         if (css[i] == '/' && (css[i + 1] == '/' || css[i + 1] == '*') && status == 0) {
             r = r + css.substring(pos, i)
@@ -24,8 +38,7 @@ function dropAnnotation(css) {
         }
     }
     r = r + css.substring(pos, css.length)
-    r = r.replace(/@https@/g, 'https://')
-    r = r.replace(/@http@/g, 'http://')
+    r = decode(r)
     return r
 }
 //属性排序
@@ -94,7 +107,6 @@ function parse(css, options = {}, callback) {
         newCss = prettier.format(newCss, { parser: options.parser || 'css' })
         return newCss
     } catch (error) {
-        console.log('zheli')
         callback(error)
         return css
     }

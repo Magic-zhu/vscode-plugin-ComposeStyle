@@ -7,5 +7,8 @@ const position = [
     "bottom", 
     "clip",
     "float",
+    "overflow",
+    "visibility",
+    "display",
 ]
 module.exports = position

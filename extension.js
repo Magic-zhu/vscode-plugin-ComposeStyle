@@ -36,7 +36,7 @@ function activate(context) {
 			})
 		})
     })
-    context.subscriptions.push(didSaveEvent);
+	context.subscriptions.push(didSaveEvent);
 }
 exports.activate = activate;
 

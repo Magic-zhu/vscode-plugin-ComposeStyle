@@ -1,4 +1,5 @@
 const border =[
+    "border",
     "border-width",
     "border-color",
     "border-bottom",	
@@ -22,8 +23,6 @@ const border =[
     "outline-color",
     "outline-style",	//设置轮廓的样式。	2
     "outline-width",	//设置轮廓的宽度。	2
-    "border-bottom-left-radius",	//定义边框左下角的形状。	3
-    "border-bottom-right-radius",	//定义边框右下角的形状。	3
     "border-image",	//简写属性，设置所有 border-image-* 属性。	3
     "border-image-outset",	//规定边框图像区域超出边框的量。	3
     "border-image-repeat",	//图像边框是否应平铺(repeated)、铺满(rounded)或拉伸(stretched)。	3
@@ -33,6 +32,8 @@ const border =[
     "border-radius",	//简写属性，设置所有四个 border-*-radius 属性。	3
     "border-top-left-radius",	//定义边框左上角的形状。	3
     "border-top-right-radius",	//定义边框右下角的形状。	3
+    "border-bottom-left-radius",	//定义边框左下角的形状。	3
+    "border-bottom-right-radius",	//定义边框右下角的形状。	3
     "box-decoration-break",		//3
     "box-shadow",	//向方框添加一个或多个阴影。	3	
 ]
