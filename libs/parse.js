@@ -58,7 +58,7 @@ function transform(css) {
             }
         }
         if (p.length == 1) {
-            newAttrs = p[0] + ';'
+            newAttrs = newAttrs + p[0] + ';'
         } else if (element) {
             attrs[p[0].replace(/\s/g, '')] = p[1].trim();
         }
