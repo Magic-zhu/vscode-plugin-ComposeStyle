@@ -17,6 +17,7 @@ function decode(input){
 
 //去除注释
 function dropAnnotation(input) {
+    let annotation =''
     let status = 0;
     let pos = 0;
     let r = ''
@@ -34,19 +35,25 @@ function dropAnnotation(input) {
             ) && status == 1
         ) {
             status = 0
+            let ano = css.substring(pos,i)
+            if(ano.indexOf('@c')==-1){
+                annotation = annotation + ano +'\n'
+            }
             pos = i + 1
         }
     }
     r = r + css.substring(pos, css.length)
     r = decode(r)
-    return r
+    return [r,annotation]
 }
 //属性排序
 function transform(css) {
-    css = dropAnnotation(css);
+    let backData = dropAnnotation(css)
+    css = backData[0]
     let attrsArray = css.replace(/\n/g, '').split(';');
     attrsArray.pop();
-    let newAttrs = '';
+    //注释放在最前面
+    let newAttrs = backData[1]; 
     let attrs = {};
     attrsArray.forEach(element => {
         let p = element.split(':')

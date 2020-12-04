@@ -2,7 +2,7 @@
 	"name": "compose-style",
 	"displayName": "compose-style",
 	"description": "样式自动排序,支持css,less,scss",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"publisher": "magic-rui",
 	"engines": {
 		"vscode": "^1.51.0"
