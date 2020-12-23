@@ -1,23 +1,23 @@
 const prettier = require("prettier")
 const RULES = require('./rules')
 
-function encode(input){
+function encode(input) {
     let output;
     output = input.replace(/https:\/\//g, '@https@')
     output = output.replace(/http:\/\//g, '@http@')
     return output
 }
 
-function decode(input){
+function decode(input) {
     let output;
     output = input.replace(/@https@/g, 'https://')
     output = output.replace(/@http@/g, 'http://')
     return output
 }
 
-//去除注释
-function dropAnnotation(input) {
-    let annotation =''
+//分离注释及其属性
+function separate(input) {
+    let annotation = ''
     let status = 0;
     let pos = 0;
     let r = ''
@@ -34,30 +34,38 @@ function dropAnnotation(input) {
                 (css[i] == '/' && css[i - 1] == '*')
             ) && status == 1
         ) {
-            status = 0
-            let ano = css.substring(pos,i)
-            if(ano.indexOf('@c')==-1){
-                annotation = annotation + ano +'\n'
+            let ano = css.substring(pos, i)
+            if (ano.indexOf('@c') == -1) {
+                annotation = annotation + ano + '\n'
             }
             pos = i + 1
+            status = 0
+        } else if (css[i + 1] == undefined && status == 1) {
+            let ano = css.substring(pos, i + 1)
+            if (ano.indexOf('@c') == -1) {
+                annotation = annotation + ano + '\n'
+            }
+            pos = i + 2
+            status = 0
         }
     }
     r = r + css.substring(pos, css.length)
     r = decode(r)
-    return [r,annotation]
+    return [r, annotation]
 }
 //属性排序
-function transform(css) {
-    let backData = dropAnnotation(css)
+function sort(css) {
+    let backData = separate(css)
     css = backData[0]
     let attrsArray = css.replace(/\n/g, '').split(';');
     attrsArray.pop();
     //注释放在最前面
-    let newAttrs = backData[1]; 
+    let newAttrs = backData[1];
     let attrs = {};
     attrsArray.forEach(element => {
         let p = element.split(':')
-        if (p.length > 2) { //处理存在多个:的情况
+        //处理存在多个:的情况
+        if (p.length > 2) { 
             let count = 2, final = p.length
             while (count < final) {
                 p[1] = p[1] + ':' + p[count]
@@ -95,14 +103,14 @@ function parse(css, options = {}, callback) {
             let str = css.substring(slicePosition, i + 1);
             let pos = str.lastIndexOf(';');
             if (pos !== -1) {
-                result.push(transform(str.substring(0, pos + 1)))
+                result.push(sort(str.substring(0, pos + 1)))
                 result.push(str.substring(pos + 1, str.length))
             } else {
                 result.push(str)
             }
             slicePosition = i + 1;
         } else if (css[i] == '}' && status == 'start') {
-            let attrs = transform(css.substring(slicePosition, i))
+            let attrs = sort(css.substring(slicePosition, i))
             result.push(attrs);
             slicePosition = i;
             status = 'normal'
