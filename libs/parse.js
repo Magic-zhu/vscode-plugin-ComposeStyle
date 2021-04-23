@@ -1,6 +1,11 @@
 const prettier = require("prettier")
 const RULES = require('./rules')
 
+// 关键字 列表 匹配到的时候保留原样
+const KEYWORD_MAP = [
+    '@include',
+]
+
 function encode(input) {
     let output;
     output = input.replace(/https:\/\//g, '@https@')
@@ -13,6 +18,15 @@ function decode(input) {
     output = input.replace(/@https@/g, 'https://')
     output = output.replace(/@http@/g, 'http://')
     return output
+}
+
+function ifHasKeyWord(ele) {
+    for (let i = 0, len = KEYWORD_MAP.length; i < len; i++) {
+        if (ele.indexOf(KEYWORD_MAP[i]) !== -1) {
+            return true
+        }
+    }
+    return false
 }
 
 //分离注释及其属性
@@ -35,16 +49,12 @@ function separate(input) {
             ) && status == 1
         ) {
             let ano = css.substring(pos, i)
-            if (ano.indexOf('@c') == -1) {
-                annotation = annotation + ano + '\n'
-            }
+            annotation = annotation + ano + '\n'
             pos = i + 1
             status = 0
         } else if (css[i + 1] == undefined && status == 1) {
             let ano = css.substring(pos, i + 1)
-            if (ano.indexOf('@c') == -1) {
-                annotation = annotation + ano + '\n'
-            }
+            annotation = annotation + ano + '\n'
             pos = i + 2
             status = 0
         }
@@ -55,27 +65,30 @@ function separate(input) {
 }
 //属性排序
 function sort(css) {
-    let backData = separate(css)
-    css = backData[0]
+    let newAttrs='';
+    let backData = separate(css);
+    css = backData[0];
     let attrsArray = css.replace(/\n/g, '').split(';');
     attrsArray.pop();
-    //注释放在最前面
-    let newAttrs = backData[1];
     let attrs = {};
     attrsArray.forEach(element => {
-        let p = element.split(':')
-        //处理存在多个:的情况
-        if (p.length > 2) { 
-            let count = 2, final = p.length
-            while (count < final) {
-                p[1] = p[1] + ':' + p[count]
-                count++
+        if(ifHasKeyWord(element)){
+            newAttrs =  newAttrs + element + ";";
+        }else{
+            let p = element.split(':')
+            //处理存在多个:的情况
+            if (p.length > 2) {
+                let count = 2, final = p.length
+                while (count < final) {
+                    p[1] = p[1] + ':' + p[count]
+                    count++
+                }
             }
-        }
-        if (p.length == 1) {
-            newAttrs = newAttrs + p[0] + ';'
-        } else if (element) {
-            attrs[p[0].replace(/\s/g, '')] = p[1].trim();
+            if (p.length == 1) {
+                newAttrs = newAttrs + p[0] + ';'
+            } else if (element) {
+                attrs[p[0].replace(/\s/g, '')] = p[1].trim();
+            }
         }
     })
     RULES.forEach((item) => {
