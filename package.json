@@ -2,9 +2,9 @@
 	"name": "compose-style",
 	"displayName": "compose-style",
 	"description": "样式自动排序,支持css,less,scss",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"publisher": "magic-rui",
-	"icon":"smile.jpg",
+	"icon": "smile.jpg",
 	"engines": {
 		"vscode": "^1.51.0"
 	},
@@ -18,14 +18,18 @@
 	],
 	"main": "./extension.js",
 	"contributes": {
-		"commands": [{
-			"title": "format Style",
-			"command": "extension.compose.formatStyle"
-		}],
-		"menus": {
-			"editor/context": [{
+		"commands": [
+			{
+				"title": "format Style",
 				"command": "extension.compose.formatStyle"
-			}]
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "extension.compose.formatStyle"
+				}
+			]
 		}
 	},
 	"scripts": {
