@@ -2,7 +2,7 @@
 	"name": "compose-style",
 	"displayName": "compose-style",
 	"description": "样式自动排序,支持css,less,scss",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"publisher": "magic-rui",
 	"icon": "smile.jpg",
 	"engines": {

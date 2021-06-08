@@ -3,7 +3,7 @@
 All notable changes to the "compose-style" extension will be documented in this file.
 
 
-## 0.1.5
+## 0.1.6
 + FIX:修复路劲问题
 
 ## 0.1.3
