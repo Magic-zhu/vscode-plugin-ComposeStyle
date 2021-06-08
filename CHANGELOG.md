@@ -2,10 +2,10 @@
 
 All notable changes to the "compose-style" extension will be documented in this file.
 
+
 ## 0.1.5
-+ ADD: 快捷键（bug）
-## 0.1.4
-+ ADD: 保存时自动执行改为右键点击命令执行
++ FIX:修复路劲问题
+
 ## 0.1.3
 + ADD:icon
 

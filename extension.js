@@ -11,17 +11,18 @@ function activate(context) {
 	vscode.window.setStatusBarMessage('ComposeStyle Active');
 
 	let formatStyle = vscode.commands.registerCommand('extension.compose.formatStyle', (uri) => {
+		const path = uri.fsPath
 		let type;
-		if (uri.path.endsWith('.css')) {
+		if (path.endsWith('.css')) {
 			type = 'css'
-		} else if (uri.path.endsWith('.scss')) {
+		} else if (path.endsWith('.scss')) {
 			type = 'scss'
-		} else if (uri.path.endsWith('.less')) {
+		} else if (path.endsWith('.less')) {
 			type = 'less'
 		} else {
 			return
 		}
-		fs.readFile(uri.path, (err, buffer) => {
+		fs.readFile(path, (err, buffer) => {
 			if (err) {
 				vscode.window.showErrorMessage('something wrong')
 				return
@@ -29,7 +30,7 @@ function activate(context) {
 			let data = parse(buffer.toString(), { parser: type }, () => {
 				vscode.window.showErrorMessage('检测到不支持的语法')
 			})
-			fs.writeFile(uri.path, data, (err) => {
+			fs.writeFile(path, data, (err) => {
 				if (err) {
 					vscode.window.showErrorMessage('something wrong')
 					return
